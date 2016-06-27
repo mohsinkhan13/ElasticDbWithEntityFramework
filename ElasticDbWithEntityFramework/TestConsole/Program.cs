@@ -24,7 +24,8 @@ namespace TestConsole
             {
                 UserID = s_userName,
                 Password = s_password,
-                ApplicationName = s_applicationName
+                ApplicationName = s_applicationName,
+                MultipleActiveResultSets = true
             };
 
             // Bootstrap the shard map manager, register shards, and store mappings of tenants to shards
@@ -42,14 +43,15 @@ namespace TestConsole
                 using (var db = new CustomerContext<int>(sharding.ShardMap, 19, connStrBldr.ConnectionString))
                 {
                     var query = from b in db.Orders
-                                where b.CustomerId == 19 // this should not be required
+                                where b.CustomerId == 19
                                 orderby b.OrderId
                                 select b;
 
-                    Console.WriteLine("All orders for customer id {0}:",19 );
+                    Console.WriteLine("All orders for customer id {0}:", 19);
                     foreach (var item in query)
                     {
-                        Console.WriteLine($"{item.OrderId}\t{item.OrderDate}");
+                        //Console.WriteLine($"{item.OrderId}\t{item.OrderDate}");
+                        Console.WriteLine($"{item.OrderId}\t{item.Product.Name}\t{item.OrderDate}");
                     }
                 }
             });
