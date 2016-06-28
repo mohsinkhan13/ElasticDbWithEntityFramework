@@ -1,10 +1,7 @@
 ﻿using CS.Data.Context.CustomerBoundedContext;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestConsole
 {
@@ -28,14 +25,7 @@ namespace TestConsole
                 MultipleActiveResultSets = true
             };
 
-            // Bootstrap the shard map manager, register shards, and store mappings of tenants to shards
-            // Note that you can keep working with existing shard maps. There is no need to 
-            // re-create and populate the shard map from scratch every time.
-            //Console.WriteLine("Checking for existing shard map and creating new shard map if necessary.");
-
             Sharding sharding = new Sharding(s_server, s_shardmapmgrdb, connStrBldr.ConnectionString);
-            //sharding.RegisterNewShard(s_server, s_shard1, connStrBldr.ConnectionString, s_tenantId1);
-            //sharding.RegisterNewShard(s_server, s_shard2, connStrBldr.ConnectionString, s_tenantId2);
 
             
             SqlDatabaseUtils.SqlRetryPolicy.ExecuteAction(() =>
@@ -50,7 +40,6 @@ namespace TestConsole
                     Console.WriteLine("All orders for customer id {0}:", 19);
                     foreach (var item in query)
                     {
-                        //Console.WriteLine($"{item.OrderId}\t{item.OrderDate}");
                         Console.WriteLine($"{item.OrderId}\t{item.Product.Name}\t{item.OrderDate}");
                     }
                 }
